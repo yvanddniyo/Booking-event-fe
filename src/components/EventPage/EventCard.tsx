@@ -9,7 +9,7 @@ import { formatDate, formatPrice } from "../../utls/strongPassword";
 const EventCard = ({ event, onBookNow, className = "" }: EventCardProps) => {
   const [isBooking, setIsBooking] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-
+  console.log("event", event);
   const handleBookNow = async () => {
     if (event.availableSeats <= 0) return;
     
@@ -28,6 +28,7 @@ const EventCard = ({ event, onBookNow, className = "" }: EventCardProps) => {
   return (
     <Link to={`/events/${event.id}`}>
     <div
+      key={event.id}
       className={`relative group cursor-pointer transition-all duration-500 ease-out ${className}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}

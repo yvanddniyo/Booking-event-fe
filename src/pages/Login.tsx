@@ -6,7 +6,6 @@ import { useLogin } from "../hooks/useRegisterAndLogin";
 const Login = () => {
   const { register, handleSubmit, errors, loginUserMutation, isPending } = useLogin();
   const onSubmit = (data: LoginFormData) => {
-    console.log("data -->", data);
     loginUserMutation(data);
   };
  

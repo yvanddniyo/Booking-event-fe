@@ -7,6 +7,7 @@ import Register from "./pages/Register"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { ToastContainer} from 'react-toastify';
 import Login from "./pages/Login"
+import AdminPage from "./pages/AdminPage"
 
 const queryClient = new QueryClient()
 
@@ -26,6 +27,7 @@ const App = () => {
             <Route path="/events/:id" element={<SinglePageEvent />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/admin" element={<AdminPage />} />
           </Routes> 
         </div>
       </QueryClientProvider>

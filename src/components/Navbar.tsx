@@ -2,7 +2,8 @@ import { Link, useNavigate } from "react-router-dom"
 import { navLinks } from "../constant"
 import Button from "./ReusableComponent/Button"
 import { useState } from "react"
-import { Menu, X } from "lucide-react"
+import { LogOut, Menu, X } from "lucide-react"
+import { getUserFromToken } from "../utls/jwt"
 
 const Navbar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
@@ -11,7 +12,12 @@ const Navbar = () => {
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen)
   }
-
+ const userInfo = getUserFromToken();
+ console.log("userInfo", userInfo);
+ const handleLogout = () => {
+  localStorage.removeItem("token");
+  navigate("/");
+ }
   return (
     <>
       <div className="w-full flex justify-between items-center p-4">
@@ -31,14 +37,23 @@ const Navbar = () => {
           ))}
         </div>
         
-        <div className="hidden md:flex items-center gap-8">
+       {userInfo ?(<div className="hidden md:flex items-center gap-8">
+        <div className="font-medium text-xl hover:text-gray-300 transition-all duration-300">
+          <div className="flex items-center gap-4">
+            <div className="w-10 h-10 rounded-full bg-gray-500 text-white flex items-center justify-center">
+              {userInfo.email.split("@")[0].charAt(0)}
+            </div>
+            <div className="text-sm"><LogOut className="text-white hover:text-gray-300 transition-all duration-300 cursor-pointer" size={20} onClick={handleLogout} /> </div>
+          </div>
+        </div>
+       </div>): (<div className="hidden md:flex items-center gap-8">
           <Button className="bg-transparent text-white hover:bg-purple-500 hover:text-white" onClick={() => navigate("/login")}>
             Login
           </Button>
           <Button className="bg-transparent border-2 border-gray-500 text-white hover:bg-purple-500 hover:text-white" onClick={() => navigate("/register")} >
             Signup
           </Button>
-        </div>
+        </div>)}
         <button 
           onClick={toggleSidebar}
           className="md:hidden text-white p-2"
@@ -82,14 +97,18 @@ const Navbar = () => {
             ))}
           </div>
 
-          <div className="flex flex-col gap-4 mt-auto">
-            <Button className="w-full border-2 border-gray-500 text-white hover:bg-purple-500 hover:text-white">
+        {userInfo ? <div className="flex flex-col gap-4 mt-auto">
+          <Button className="w-full border-2 border-gray-500 text-white hover:bg-purple-500 hover:text-white" onClick={handleLogout}>
+            Logout
+          </Button>
+        </div> : <div className="flex flex-col gap-4 mt-auto">
+            <Button className="w-full border-2 border-gray-500 text-white hover:bg-purple-500 hover:text-white" onClick={() => navigate("/login")}>
               Login
             </Button>
-            <Button className="w-full bg-transparent border-2 border-gray-500 text-white hover:bg-purple-500 hover:text-white">
+            <Button className="w-full bg-transparent border-2 border-gray-500 text-white hover:bg-purple-500 hover:text-white" onClick={() => navigate("/register")}>
               Signup
             </Button>
-          </div>
+          </div>}
         </div>
       </div>
     </>

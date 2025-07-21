@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { loginSchema, registerSchema } from "../Schema/registerAndLoginSchema";
-import { getEvents, getSingleEvent, loginUser, registerUser, type LoginFormData, type RegisterFormData } from "./FetchingAndPost";
+import { createEvent, getBookingsPerEvent, getEvents, getSingleEvent, loginUser, registerUser, type LoginFormData, type RegisterFormData } from "./FetchingAndPost";
 
 export const useRegister = () => {
   const navigate = useNavigate();
@@ -42,7 +42,12 @@ export const useLogin = () => {
     onSuccess: (data) => {
       toast.success("Login successful! Welcome back!");
       localStorage.setItem("token", data.token);
-      const decodedToken = jwtDecode(data.token);
+      const decodedToken = jwtDecode(data.token) as { role: string };
+      const userRole = decodedToken.role;
+      if (userRole === "ADMIN") {
+        navigate("/admin");
+        return;
+      }
       localStorage.setItem("user", JSON.stringify(decodedToken));
       navigate("/events");
     },
@@ -72,4 +77,18 @@ export const useGetSingleEvent = (id: string) => {
   });
 
   return { data, isLoading, error };
+};
+
+export const useCreateEvent = () => {
+  return useMutation({
+    mutationFn: createEvent,
+  });
+};
+
+export const useGetBookingsPerEvent = (eventId: string) => {
+  return useQuery({
+    queryKey: ["bookings", eventId],
+    queryFn: () => getBookingsPerEvent(eventId),
+    enabled: !!eventId,
+  });
 };

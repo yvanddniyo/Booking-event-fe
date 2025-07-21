@@ -5,19 +5,31 @@ import { Link, useParams } from "react-router-dom"
 import { useGetSingleEvent } from "../hooks/useRegisterAndLogin"
 import { formatDate, formatPrice } from "../utls/strongPassword"
 import SinglePageLoader from "../components/Skeleton/SinglePageLoader"
+import { useGetUserBookings } from "../hooks/useEventHooks"
+import { useState } from 'react';
+import { BookingModal } from '../components/EventPage/BookingModal';
+import { getUserFromToken } from "../utls/jwt"
 
  const SinglePageEvent = () => {
   const { id } = useParams();
-  console.log("id -->", id);
+  const decodedToken = getUserFromToken()
+  const userId = decodedToken?.id
   const { data, isLoading, error } = useGetSingleEvent(id || "");
-  console.log("data -->", data);
+  const { bookingsData, isBookingsLoading } = useGetUserBookings(userId || "");
+  const [isModalOpen, setModalOpen] = useState(false);
+  console.log("bookingsData -->", bookingsData);
   if(error) {
     return <div>Error: {error.message}</div>
   }
   if(isLoading) {
+    return <div className="flex justify-center items-center h-screen">
+      <SinglePageLoader />
+    </div>
+  }  
+
+  if(isBookingsLoading) {
     return <div>Loading...</div>
   }
-  console.log("isLoading -->", isLoading);
   return (
     <>
     {isLoading || !data?.data ? <SinglePageLoader /> : (
@@ -67,12 +79,74 @@ import SinglePageLoader from "../components/Skeleton/SinglePageLoader"
               <p>Price: {formatPrice(data?.data?.price)}</p>
             </div>
             <div className="flex justify-center">
-              <Button className="bg-purple-500 text-white px-4 py-2 w-fit hover:bg-purple-600">
+              <Button
+                className="bg-purple-500 text-white px-4 py-2 w-fit hover:bg-purple-600"
+                onClick={() => setModalOpen(true)}
+              >
                 Book Now
               </Button>
             </div>
+            <BookingModal
+              isOpen={isModalOpen}
+              onClose={() => setModalOpen(false)}
+            />
           </div>
         </div>
+        <div className="">
+          <h2 className="text-xl font-semibold mb-2">Your Booked Tickets</h2>
+          {bookingsData && bookingsData.length > 0 ? (
+            // @ts-expect-error - booking is of type any
+            bookingsData.map((booking) => (
+              <div
+                key={booking.id}
+                className="border-[0.5px] border-gray-200 rounded-lg p-4 mb-4  shadow-sm"
+              >
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+                  <div>
+                    <div className="font-bold text-lg">{booking.event.title}</div>
+                    <div className="text-sm">{booking.event.location}</div>
+                    <div className="text-sm">
+                      Date: {formatDate(booking.event.date)}
+                    </div>
+                  </div>
+                  <div>
+                    <div>
+                      <span className="font-semibold">Status:</span>{" "}
+                      <span
+                        className={
+                          booking.status === "PENDING"
+                            ? "text-yellow-600"
+                            : booking.status === "CONFIRMED"
+                            ? "text-green-600"
+                            : "text-red-600"
+                        }
+                      >
+                        {booking.status}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="font-semibold">Quantity:</span> {booking.quantity}
+                    </div>
+                    <div>
+                      <span className="font-semibold">Total Price:</span> {formatPrice(booking.totalPrice)}
+                    </div>
+                    <div>
+                      <span className="font-semibold">Booked At:</span> {formatDate(booking.createdAt)}
+                    </div>
+                  </div>
+                  <div>
+                    <Button className="bg-red-500 text-white px-4 py-2 w-fit hover:bg-red-600">
+                      Cancel
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="text-gray-500">You have not booked any tickets for this event.</div>
+          )}
+        </div>
+    
       </div>
       )}
     </>
