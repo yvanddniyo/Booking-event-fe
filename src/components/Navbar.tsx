@@ -13,7 +13,6 @@ const Navbar = () => {
     setIsSidebarOpen(!isSidebarOpen)
   }
  const userInfo = getUserFromToken();
- console.log("userInfo", userInfo);
  const handleLogout = () => {
   localStorage.removeItem("token");
   navigate("/");
