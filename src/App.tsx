@@ -16,7 +16,7 @@ const App = () => {
   const isRegisterPage = location.pathname === '/register' || location.pathname === '/login';
 
   return (
-    <div className="text-white min-h-full md:h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900" >
+    <div className="text-white bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900" >
       <QueryClientProvider client={queryClient}>
         <ToastContainer />
         <div className="mx-4 md:mx-20">
