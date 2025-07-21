@@ -12,7 +12,6 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const { register, handleSubmit, watch, errors, registerUserMutation, isPending } = useRegister();
   const onSubmit = (data: RegisterFormData) => {
-    console.log("data -->", data);
     registerUserMutation(data);
   };
 
