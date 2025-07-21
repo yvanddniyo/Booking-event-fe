@@ -4,8 +4,9 @@ import Button from '../ReusableComponent/Button';
 import { useCreateBooking } from '../../hooks/useEventHooks';
 import type { BookingFormData } from '../../type';
 import { getUserFromToken } from '../../utls/jwt';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useGetSingleEvent } from '../../hooks/useRegisterAndLogin';
+import { toast } from 'react-toastify';
 
 interface BookingModalProps {
   isOpen: boolean;
@@ -16,10 +17,12 @@ const statusOptions = ['PENDING', 'CONFIRMED', 'CANCELLED'];
 
 export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) => {
   const { register, handleSubmit, setValue, watch, createBookingMutation, isBookingPending } = useCreateBooking();
+  const navigate = useNavigate();
   const { id } = useParams();
   const { data: eventData } = useGetSingleEvent(id || "");
   const decodedToken = getUserFromToken();
   const userId = decodedToken?.id;
+ 
 
   const quantity = watch('quantity', 1);
   const price = eventData?.data?.price || 0;
@@ -47,10 +50,17 @@ export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) =
       quantity: data.quantity,
       totalPrice: data.totalPrice,
     };
+    if (!decodedToken) {
+      return toast.error("Please login to book an event");
+    }
     // @ts-expect-error - mutateValue is of type any
     createBookingMutation(mutateValue);
     onClose();
   };
+const handleLogin = () => {
+  navigate("/login");
+  toast.error("Please login to book an event");
+}
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -87,7 +97,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) =
           <Button type="button" className="bg-gray-300 text-black" onClick={onClose}>
             Cancel
           </Button>
-          <Button type="submit" className="bg-purple-500 text-white" isLoading={isBookingPending}>
+          <Button type="submit" className="bg-purple-500 text-white" isLoading={isBookingPending} onClick={handleLogin}>
             Submit
           </Button>
         </div>

@@ -1,14 +1,13 @@
 import { ArrowLeft, Calendar, Clock, DollarSign, MapPin, Users } from "lucide-react"
-import Button from "../components/ReusableComponent/Button"
 import { Link, useParams } from "react-router-dom"
+import Button from "../components/ReusableComponent/Button"
 
-import { useGetSingleEvent } from "../hooks/useRegisterAndLogin"
-import { formatDate, formatPrice } from "../utls/strongPassword"
-import SinglePageLoader from "../components/Skeleton/SinglePageLoader"
+import { useState } from 'react'
+import { BookingModal } from '../components/EventPage/BookingModal'
 import { useGetUserBookings } from "../hooks/useEventHooks"
-import { useState } from 'react';
-import { BookingModal } from '../components/EventPage/BookingModal';
+import { useGetSingleEvent } from "../hooks/useRegisterAndLogin"
 import { getUserFromToken } from "../utls/jwt"
+import { formatDate, formatPrice } from "../utls/strongPassword"
 
  const SinglePageEvent = () => {
   const { id } = useParams();
@@ -17,24 +16,26 @@ import { getUserFromToken } from "../utls/jwt"
   const { data, isLoading, error } = useGetSingleEvent(id || "");
   const { bookingsData, isBookingsLoading } = useGetUserBookings(userId || "");
   const [isModalOpen, setModalOpen] = useState(false);
-  console.log("bookingsData -->", bookingsData);
   if(error) {
     return <div>Error: {error.message}</div>
   }
+
   if(isLoading) {
-    return <div className="flex justify-center items-center h-screen">
-      <SinglePageLoader />
+    return <div className="flex justify-center text-2xl items-center h-screen">
+      Loading ...
     </div>
   }  
 
   if(isBookingsLoading) {
-    return <div className="flex justify-center items-center h-screen">
-      <SinglePageLoader />
-    </div>
+    return <div className="flex justify-center text-2xl items-center h-screen">
+    Loading ...
+  </div>
   }
   return (
     <>
-    {isLoading || !data?.data ? <SinglePageLoader /> : (
+    {isLoading || !data?.data ? <div className="flex justify-center items-center h-screen">
+      Loading ...
+    </div> : (
       <div className="max-w-7xl h-screen mx-auto flex flex-col gap-6 md:p-6 p-2">
         <div className="flex items-center justify-between gap-2">
           <h1 className="text-2xl font-bold ">{data?.data?.title}</h1>

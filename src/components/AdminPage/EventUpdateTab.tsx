@@ -35,7 +35,6 @@ const EventUpdateTab = ({ eventsData, isEventsLoading, eventsError, setTab, setE
                 <Button className="bg-purple-600 text-white rounded-full hover:bg-purple-700 transition-colors">Edit</Button>
                 <Button className="border-2 border-purple-500 text-white rounded-full hover:bg-purple-700 transition-colors" onClick={() => {
                   setEventId(event.id);
-                  console.log("eventId", event.id);
                   setTab("bookings");
                 }}>Bookings</Button>
               </td>

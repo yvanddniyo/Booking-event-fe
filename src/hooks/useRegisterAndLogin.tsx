@@ -23,7 +23,6 @@ export const useRegister = () => {
     },
     onError: (error: AxiosError<{ error: string }>) => {
       toast.error(error?.response?.data?.error);
-      reset();
     },
   });
 
@@ -53,7 +52,6 @@ export const useLogin = () => {
     },
     onError: (error: AxiosError<{ error: string }>) => {
       toast.error(error?.response?.data?.error);
-      reset();
     },
   });
 

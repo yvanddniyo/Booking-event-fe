@@ -27,7 +27,7 @@ const SinglePageLoader = () => {
             </div>
     
             <div className="flex items-center gap-2">
-              <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
+              <Skeleton variant="text" width={'200px'} sx={{ fontSize: '1rem' }} />
               <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
             </div>
 

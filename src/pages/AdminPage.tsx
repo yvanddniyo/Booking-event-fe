@@ -6,15 +6,12 @@ import { useEventHooks } from "../hooks/useEventHooks";
 import type { Booking, Event, EventFormData } from "../type";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { getUserFromToken } from "../utls/jwt";
 import { useGetBookingsPerEvent } from "../hooks/useRegisterAndLogin";
 
 
 const AdminPage = () => {
   const [tab, setTab] = useState<'create' | 'events' | 'bookings'>('create');
   const [eventId, setEventId] = useState<string>("");
-  const userInfo = getUserFromToken();
-  console.log("userInfo", userInfo);
   const { data: bookingsData, isLoading: isBookingsLoading, error: bookingsError } = useGetBookingsPerEvent(eventId); 
 
   const { register, handleSubmit, setValue, reset, formState: { errors } } = useForm<EventFormData>();

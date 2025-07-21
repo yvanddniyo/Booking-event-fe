@@ -8,11 +8,7 @@ export const navLinks = [
   {
     label: "Events",
     href: "/events",
-  },
-  {
-    label: "About",
-    href: "/about",
-  },
+  }
 ]
 export const categories = [
   {
