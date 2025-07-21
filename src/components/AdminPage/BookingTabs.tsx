@@ -13,7 +13,6 @@ const BookingTabs = ({ bookingsData, isBookingsLoading, bookingsError }: Booking
           <tr>
             <th className="px-4 py-2 text-left">Booking ID</th>
             <th className="px-4 py-2 text-left">Event</th>
-            <th className="px-4 py-2 text-left">User</th>
             <th className="px-4 py-2 text-left">Seats</th>
             <th className="px-4 py-2 text-left">Date</th>
           </tr>
