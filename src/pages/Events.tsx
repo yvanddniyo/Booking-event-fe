@@ -11,7 +11,7 @@ const Events = () => {
   const filteredEvents = data?.filter((event: Event) => event?.title?.toLowerCase().includes(search.toLowerCase()));
 
   return (
-    <div className="flex flex-col lg:flex-row gap-6 p-6">
+    <div className="flex flex-col lg:flex-row gap-6 p-6 min-h-screen">
       <EventSideBar />
       <div className="flex-1">
         <div className="mb-6">
