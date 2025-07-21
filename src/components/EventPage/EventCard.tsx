@@ -9,7 +9,6 @@ import { formatDate, formatPrice } from "../../utls/strongPassword";
 const EventCard = ({ event, onBookNow, className = "" }: EventCardProps) => {
   const [isBooking, setIsBooking] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-  console.log("event", event);
   const handleBookNow = async () => {
     if (event.availableSeats <= 0) return;
     
